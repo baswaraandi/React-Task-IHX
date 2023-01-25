@@ -75,6 +75,15 @@ class ClassComponent extends React.Component {
 
   componentDidMount = this.runTimer;
 
+  componentDidUpdate() {
+    document.title = this.state.timer;
+    
+    if(this.state.timer === '00:00:00')
+    {
+      if(this.interval) clearInterval(this.interval);
+    }
+  }
+
   componentWillUnmount() {
     if(this.interval.current) clearInterval(this.interval)
   }
