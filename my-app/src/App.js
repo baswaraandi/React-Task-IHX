@@ -2,13 +2,31 @@ import logo from "./logo.svg";
 import "./App.css";
 import Teks from "./component/Teks";
 import React, { useState, useRef, useEffect } from "react";
+import List from "./component/List";
 
 function App() {
   // const Ref = useRef(null);
+  //const [listItem, setListItem] = useState([]);
   const [text, setText] = useState("");
   const [showImage, setShowImage] = useState(false);
   const cobaTeks = "Andyka Baswara Putra";
   const [timer, setTimer] = useState("00:00:00");
+
+  //TodoList
+  const listItem = [
+    {
+      id: 1,
+      content: "Belajar props",
+    },
+    {
+      id: 2,
+      content: "Belajar state",
+    },
+    {
+      id: 3,
+      content: "Belajar react",
+    },
+  ];
 
   // Time
   const getTimeRemaining = (e) => {
@@ -16,7 +34,7 @@ function App() {
     const seconds = Math.floor((total / 1000) % 60);
     const minutes = Math.floor((total / 1000 / 60) % 60);
     const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-    
+
     return {
       total,
       hours,
@@ -93,6 +111,13 @@ function App() {
         <h2>{timer}</h2>
         <button onClick={onClickReset}>Reset</button>
       </header>
+
+      {/* START TODO LIST */}
+      <div>
+        <h1>Todo List</h1>
+        <List items={listItem} />
+      </div>
+      {/* END TODO LIST */}
     </div>
   );
 }
