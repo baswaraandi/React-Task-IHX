@@ -1,14 +1,86 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import Teks from "./component/Teks";
+import React, { useState, useRef, useEffect } from "react";
 
 function App() {
+  // const Ref = useRef(null);
+  const [text, setText] = useState("");
+  const [showImage, setShowImage] = useState(false);
+  const cobaTeks = "Andyka Baswara Putra";
+  const [timer, setTimer] = useState("00:00:00");
+
+  // Time
+  const getTimeRemaining = (e) => {
+    const total = Date.parse(e) - Date.parse(new Date());
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    const hours = Math.floor((total / 1000 / 60 / 60) % 24);
+    
+    return {
+      total,
+      hours,
+      minutes,
+      seconds,
+    };
+  };
+
+  const startTimer = (e) => {
+    let { total, hours, minutes, seconds } = getTimeRemaining(e);
+    if (total >= 0) {
+      setTimer(
+        (hours > 9 ? hours : "0" + hours) +
+          ":" +
+          (minutes > 9 ? minutes : "0" + hours) +
+          ":" +
+          (seconds > 9 ? seconds : "0" + seconds)
+      );
+    }
+  };
+
+  const clearTimer = (e) => {
+    setTimer("00:00:10");
+
+    if (useRef.current) clearInterval(useRef.current);
+    const id = setInterval(() => {
+      startTimer(e);
+    }, 100);
+    useRef.current = id;
+  };
+
+  const getDeadTime = () => {
+    let deadline = new Date();
+    deadline.setSeconds(deadline.getSeconds() + 10);
+    return deadline;
+  };
+
+  useEffect(() => {
+    text === "spawn" ? setShowImage(true) : setShowImage(false);
+  }, [text]);
+
+  useEffect(() => {
+    clearTimer(getDeadTime());
+  }, []);
+
+  const onClickReset = () => {
+    clearTimer(getDeadTime());
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        {showImage ? <img src={logo} className="App-logo" alt="logo" /> : ""}
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
+        <Teks coba={cobaTeks} />
+        <h5>{text}</h5>
+        <input
+          type="text"
+          className="text"
+          placeholder="type here"
+          onChange={(typing) => setText(typing.target.value)}
+        ></input>
         <a
           className="App-link"
           href="https://reactjs.org"
@@ -17,6 +89,9 @@ function App() {
         >
           Learn React
         </a>
+
+        <h2>{timer}</h2>
+        <button onClick={onClickReset}>Reset</button>
       </header>
     </div>
   );
