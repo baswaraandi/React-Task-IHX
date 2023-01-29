@@ -1,103 +1,28 @@
 import logo from "./logo.svg";
 import "./App.css";
 import Teks from "./component/Teks";
-import React, { useState, useRef, useEffect } from "react";
-import List from "./component/List";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import TimerClass from "./component/TimerClass";
+import Props from "./component/Props";
+import Counter from "./component/Counter";
+import Promise from "./component/Promise";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { Button } from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route index element={<Home />} />
-        <Route path="class-component" element={<ClassComponent />} />
+        <Route path="timer-Function-component" element={<TimerClass />} />
+        <Route path="timer-class-component" element={<TimerClass />} />
+        <Route path="props-implement" element={<Props />} />
+        <Route path="counter" element={<Counter />} />
+        <Route path="promise" element={<Promise />} />
       </Routes>
     </BrowserRouter>
   );
-}
-
-class ClassComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {timer: "00:00:10"};
-    this.interval = React.createRef();
-  };
-
-  getTimeRemaining = (e) => {
-    const total = Date.parse(e) - Date.parse(new Date());
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-    const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-
-    return {
-      total,
-      hours,
-      minutes,
-      seconds,
-    };
-  };
-
-  getDeadTime = () => {
-    let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 10);
-    return deadline;
-  };
-
-  setTimer = (text) => {
-    this.setState({timer: text});
-  }
-
-  startTimer = (e) => {
-    let { total, hours, minutes, seconds } = this.getTimeRemaining(e);
-    if (total >= 0) {
-      this.setTimer(
-        (hours > 9 ? hours : "0" + hours) +
-          ":" +
-          (minutes > 9 ? minutes : "0" + hours) +
-          ":" +
-          (seconds > 9 ? seconds : "0" + seconds)
-      );
-    }
-  };
-
-  runTimer = () => {
-    this.setTimer('00:00:10');
-    let deadTime = this.getDeadTime();
-    if(this.interval) clearInterval(this.interval)
-
-    this.interval = setInterval(() => {
-      this.startTimer(deadTime)
-    }, 1000)
-  }
-
-  onClickReset = this.runTimer;
-
-  componentDidMount = this.runTimer;
-
-  componentDidUpdate() {
-    document.title = this.state.timer;
-    
-    if(this.state.timer === '00:00:00')
-    {
-      if(this.interval) clearInterval(this.interval);
-    }
-  }
-
-  componentWillUnmount() {
-    if(this.interval.current) clearInterval(this.interval)
-  }
-
-  render() {
-    return (
-      <div style={{'width': '100vw', 'height': '100vh', 'display': 'flex', 'align-items': 'center', 'justify-content': 'center'}}>
-        <div style={{'text-align': 'center'}}>
-          <h1>{this.state.timer}</h1>
-          <button onClick={this.onClickReset} style={{'margin-top': '10px'}}>Reset</button>
-        </div>
-      </div>
-    );
-  }
 }
 
 function Home() {
@@ -105,98 +30,11 @@ function Home() {
   //const [listItem, setListItem] = useState([]);
   const [text, setText] = useState("");
   const [showImage, setShowImage] = useState(false);
-  const cobaTeks = "Andyka Baswara Putra";
-  const [timer, setTimer] = useState("00:00:00");
-
-  //TodoList
-  const listItem = [
-    {
-      id: 1,
-      content: "Belajar props",
-    },
-    {
-      id: 2,
-      content: "Belajar state",
-    },
-    {
-      id: 3,
-      content: "Belajar react",
-    },
-  ];
-
-  // Time
-  const getTimeRemaining = (e) => {
-    const total = Date.parse(e) - Date.parse(new Date());
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-    const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-
-    return {
-      total,
-      hours,
-      minutes,
-      seconds,
-    };
-  };
-
-  const startTimer = (e) => {
-    let { total, hours, minutes, seconds } = getTimeRemaining(e);
-    if (total >= 0) {
-      setTimer(
-        (hours > 9 ? hours : "0" + hours) +
-          ":" +
-          (minutes > 9 ? minutes : "0" + hours) +
-          ":" +
-          (seconds > 9 ? seconds : "0" + seconds)
-      );
-    }
-  };
-
-  const clearTimer = (e) => {
-    setTimer("00:00:10");
-
-    if (useRef.current) clearInterval(useRef.current);
-    const id = setInterval(() => {
-      startTimer(e);
-    }, 100);
-    useRef.current = id;
-  };
-
-  const getDeadTime = () => {
-    let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 10);
-    return deadline;
-  };
+  const cobaTeks = "Tim IHX Web";
 
   useEffect(() => {
     text === "spawn" ? setShowImage(true) : setShowImage(false);
   }, [text]);
-
-  useEffect(() => {
-    clearTimer(getDeadTime());
-  }, []);
-
-  const onClickReset = () => {
-    clearTimer(getDeadTime());
-  };
-
-  // counter
-  const [counter, setCounter] = useState(0);
-
-  const increase = () => {
-    setCounter(count => count + 1);
-  };
-
-  const decrease = () => {
-    if (counter > 0){
-      setCounter(count => count - 1);
-    }
-  };
-
-  const reset = () => {
-    setCounter(0);
-  };
-  //counter
 
   return (
     <div className="App">
@@ -206,14 +44,35 @@ function Home() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <Teks coba={cobaTeks} />
-        <h5>{text}</h5>
+        <h5
+          style={{
+            margin: 5,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {text}
+        </h5>
         <input
+          style={{
+            margin: 5,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
           type="text"
           className="text"
           placeholder="type here"
           onChange={(typing) => setText(typing.target.value)}
         ></input>
         <a
+          style={{
+            margin: 5,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
           className="App-link"
           href="https://reactjs.org"
           target="_blank"
@@ -222,28 +81,144 @@ function Home() {
           Learn React
         </a>
 
-        <h2>{timer}</h2>
-        <button onClick={onClickReset}>Reset</button>
+        {/* counter */}
+        <div
+          style={{
+            margin: 5,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <a
+            href="https://docs.google.com/presentation/d/1ZycIFkR2xtmANg_r5qnpSGQUZKZpLy8hJ6VUVP3UlQg/edit?usp=sharing"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button animated="fade">
+              <Button.Content visible>Task 1 : Create React App</Button.Content>
+              <Button.Content hidden>Check it out!</Button.Content>
+              {/* <Button.Content hidden>
+              <Icon name="arrow right" />
+            </Button.Content> */}
+            </Button>
+          </a>
+        </div>
+        <div
+          style={{
+            margin: 5,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <a
+            href="https://docs.google.com/presentation/d/1S7WDNpHiA3Ivmpni-oG2csJ9Ac6tusCtmi3FgMaflwg/edit?usp=sharing"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button animated="fade">
+              <Button.Content visible>Task 2 : React JS</Button.Content>
+              <Button.Content hidden>Check it out!</Button.Content>
+              {/* <Button.Content hidden>
+              <Icon name="arrow right" />
+            </Button.Content> */}
+            </Button>
+          </a>
+        </div>
+        <div
+          style={{
+            margin: 5,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Link to="/timer-function-component">
+            <Button animated="fade">
+              <Button.Content visible>Timer Function Component</Button.Content>
+              <Button.Content hidden>Check it out!</Button.Content>
+              {/* <Button.Content hidden>
+              <Icon name="arrow right" />
+            </Button.Content> */}
+            </Button>
+          </Link>
+        </div>
+        <div
+          style={{
+            margin: 5,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Link to="/timer-class-component">
+            <Button animated="fade">
+              <Button.Content visible>Timer Class Component</Button.Content>
+              <Button.Content hidden>Check it out!</Button.Content>
+              {/* <Button.Content hidden>
+              <Icon name="arrow right" />
+            </Button.Content> */}
+            </Button>
+          </Link>
+        </div>
+        <div
+          style={{
+            margin: 5,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Link to="/props-implement">
+            <Button animated="fade">
+              <Button.Content visible>Props Implement</Button.Content>
+              <Button.Content hidden>Check it out!</Button.Content>
+
+              {/* <Button.Content hidden>
+              <Icon name="arrow right" />
+            </Button.Content> */}
+            </Button>
+          </Link>
+        </div>
+        <div
+          style={{
+            margin: 5,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Link to="/counter">
+            <Button animated="fade">
+              <Button.Content visible>Props Function (Counter)</Button.Content>
+              <Button.Content hidden>Check it out!</Button.Content>
+
+              {/* <Button.Content hidden>
+              <Icon name="arrow right" />
+            </Button.Content> */}
+            </Button>
+          </Link>
+        </div>
+        <div
+          style={{
+            margin: 5,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Link to="/promise">
+            <Button animated="fade">
+              <Button.Content visible>Promise</Button.Content>
+              <Button.Content hidden>Check it out!</Button.Content>
+              {/* <Button.Content hidden>
+              <Icon name="arrow right" />
+            </Button.Content> */}
+            </Button>
+          </Link>
+        </div>
       </header>
-
-      {/* START TODO LIST */}
-      <div>
-        <h1>Todo List</h1>
-        <List items={listItem} />
-      </div>
-      {/* END TODO LIST */}
-
-      {/* counter */}
-      <div className="counter">
-        <h1> React Counter </h1>
-        <span className="counter__output">{counter}</span>
-        <span className="btn__container">
-          <button className="control__btn" onClick={increase}>+</button>
-          <button className="control__btn" onClick={decrease}>-</button>
-          <button className="reset" onClick={reset}>Reset</button>
-        </span>
-      </div>
-      {/* counter */}
     </div>
   );
 }
